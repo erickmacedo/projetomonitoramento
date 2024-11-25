@@ -1,12 +1,25 @@
 import express from "express";
-import { inserirNovaTemperatura, principal} from "../controllers/Controllers.js";
+import { inserirNovaTemperatura, principal, cadastrarNovoUsuario, consultaUsuarios} from "../controllers/Controllers.js";
 
 const routes = (app) =>{
     app.use(express.json());
     
-    app.get('/api', principal);
+    app.get('/consultar/dados', principal);
 
     app.post('/inserir/temperatura', inserirNovaTemperatura);
+
+    app.post('/cadastrar/usuario', cadastrarNovoUsuario);
+
+    app.get('/consultar/usuarios', consultaUsuarios);
+
+    app.delete('/delete-all', async (req, res) => {
+  try {
+    await Usuario.deleteMany({}); // Deleta todos os documentos
+    res.status(200).send('Todos os registros foram apagados');
+  } catch (err) {
+    res.status(500).send('Erro ao apagar registros');
+  }
+});
 
 }
 

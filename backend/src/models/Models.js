@@ -12,3 +12,14 @@ export async function registraTemperatura(dadosTemperatura) {
     return colecao.insertOne(dadosTemperatura);
     
 }
+
+export async function insertUsuario(usuario) {
+    const colecao = db.collection("users");
+    return colecao.insertOne(usuario);
+    
+}
+
+export async function getUsers(){    
+    const colusers = db.collection("users");
+    return colusers.find().toArray();
+}

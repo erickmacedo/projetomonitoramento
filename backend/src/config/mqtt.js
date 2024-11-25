@@ -29,9 +29,8 @@ client.on('message', async (topic, message) => {
 
   if(topic == "equipe2/temperatura"){
         try {
-            const valor = message.toString();
-            console.log(valor);
-            const response = await axios.post('http://localhost:3000/inserir/temperatura', {valor});
+            const parsedMessage = JSON.parse(message.toString());
+            const response = await axios.post('http://localhost:3005/inserir/temperatura', parsedMessage);
       
           console.log('Resposta do servidor:', response.data);
         } catch (error) {
