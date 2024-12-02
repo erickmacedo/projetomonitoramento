@@ -11,8 +11,7 @@ app.use(cors());
 routes(app);
 connectionMQTT();
 
-
-
 app.listen(port, ()=>{
     console.log(`Servidor Ativo na porta ${port}`)
 })
+

@@ -33,6 +33,7 @@
     "db": "^6.0.3",
     "erickalmeida": "file:",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "mongo": "^0.1.0",
     "mqtt": "^5.10.2"
   }
