@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MiniDrawer from './components/Menu'; // Menu lateral
 import LoginPage from './components/Login'; // Página de Login
 import GraphPage from './components/GraphPage';
-import TablePage from './components/TablePage';
 import Usuarios from './components/Usuarios';
+import Logs from './components/Logs'
 import { Box } from '@mui/material';
+//MARTA INCLUIU A LINHA ABAIXO:
+//import Logs from './components/Logs';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -41,9 +43,9 @@ function AuthenticatedContent({ open, setOpen }) {
       >
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<GraphPage />} />
-          <Route path="/log" element={<TablePage />} />
-          <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/dashboard" element={<GraphPage />} /> 
+          <Route path="/log" element={<Logs />} />
+         <Route path="/usuarios" element={<Usuarios />} />
         </Routes>
       </Box>
     </>

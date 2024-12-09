@@ -19,8 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { Link } from 'react-router-dom'; 
-import { Avatar } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Avatar, Tooltip } from '@mui/material';
+import { motion } from 'framer-motion';
 
 const drawerWidth = 240;
 
@@ -30,7 +31,7 @@ const getIconForText = (text) => {
       return <DashboardIcon />;
     case 'Log':
       return <EventNoteIcon />;
-    case 'Usuarios':   
+    case 'Usuarios':
       return <PeopleAltIcon />;
     default:
       return <DashboardIcon />;
@@ -61,63 +62,47 @@ const closedMixin = (theme) => ({
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+  justifyContent: 'space-between',
+  padding: theme.spacing(0, 2),
 }));
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme }) => ({
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })( 
+  ({ theme, open }) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          ...openedMixin(theme),
-          '& .MuiDrawer-paper': openedMixin(theme),
-        },
-      },
-      {
-        props: ({ open }) => !open,
-        style: {
-          ...closedMixin(theme),
-          '& .MuiDrawer-paper': closedMixin(theme),
-        },
-      },
-    ],
-  }),
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  })
 );
 
-export default function MiniDrawer({open, setOpen}) {
+export default function MiniDrawer({ open, setOpen }) {
   const theme = useTheme();
-  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,84 +122,99 @@ export default function MiniDrawer({open, setOpen}) {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={[
-              {
-                marginRight: 5,
-              },
-              open && { display: 'none' },
-            ]}
+            sx={{
+              marginRight: 5,
+              ...(open && { display: 'none' }),
+            }}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Projeto Monitoramento Ambiental - IOT
+            Projeto Monitoramento Ambiental - IoT
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            gap: 1,
-          }}>
+        <DrawerHeader>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: '10px', marginTop: '10px'}}>
+            <Avatar
+              alt="Usuário"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDaLKwfl4wMHLy3Mx-CiTYJukaLvLRfj6uNw&s"
+            />
+            {open && <Typography variant="subtitle1">Bem-vindo!</Typography>}
+          </Box>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
-          <Avatar alt={"Remy Sharp"} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDaLKwfl4wMHLy3Mx-CiTYJukaLvLRfj6uNw&s" /> Teste teste
         </DrawerHeader>
         <Divider />
         <List>
-          {['Dashboard', 'Log', 'Usuarios'].map((text, index) => (
+          {['Dashboard', 'Log', 'Usuarios'].map((text) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
+              {open ? (
+                <ListItemButton
+                  sx={{
                     minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-                component={Link}  // Usando o Link aqui para navegação
-                to={`/${text.toLowerCase()}`} 
-                alt={`/${text.toLowerCase()}`}
-              >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
+                    '&:hover': {
+                      bgcolor: 'primary.light',
+                      color: 'white',
                     },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
+                  }}
+                  component={Link}
+                  to={`/${text.toLowerCase()}`}
                 >
-                  {getIconForText(text)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {getIconForText(text)}
+                    </ListItemIcon>
+                  </motion.div>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              ) : (
+                <Tooltip title={text} placement="right">
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: 'center',
+                      px: 2.5,
+                      '&:hover': {
+                        bgcolor: 'primary.light',
+                        color: 'white',
+                      },
+                    }}
+                    component={Link}
+                    to={`/${text.toLowerCase()}`}
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {getIconForText(text)}
+                      </ListItemIcon>
+                    </motion.div>
+                  </ListItemButton>
+                </Tooltip>
+              )}
             </ListItem>
           ))}
         </List>
