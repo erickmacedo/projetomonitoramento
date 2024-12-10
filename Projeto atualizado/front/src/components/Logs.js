@@ -8,10 +8,9 @@ import MiniDrawer from './Menu';
 
 const paginationModel = { page: 0, pageSize: 100 };
 
-export default function Logs() {
+export default function Logs({ open, setOpen }) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
 
   // Função para buscar os logs
   const fetchLogs = async () => {

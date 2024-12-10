@@ -28,12 +28,12 @@ import MiniDrawer from "./Menu";
 // Registrando elementos necessários para o gráfico
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Filler, Tooltip, Legend);
 
-const GraphPage = () => {
+const GraphPage = ({ open, setOpen }) => {
   const [selectedSensor, setSelectedSensor] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sensors, setSensors] = useState([]);
-  const [open, setOpen] = useState(false);
+ /* const [open, setOpen] = useState(false);*/
 
   // Atualiza o sensor selecionado
   const handleChange = (event) => {

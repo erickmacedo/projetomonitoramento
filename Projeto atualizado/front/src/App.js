@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import MiniDrawer from './components/Menu'; // Menu lateral
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import LoginPage from './components/Login'; // Página de Login
 import GraphPage from './components/GraphPage';
 import Usuarios from './components/Usuarios';
@@ -16,26 +15,13 @@ function App() {
 
   return (
     <Router>
-      <AuthenticatedContent open={open} setOpen={setOpen} />
-    </Router>
-  );
-}
-
-function AuthenticatedContent({ open, setOpen }) {
-  const location = useLocation(); // Agora dentro do Router, useLocation funciona
-
-  // Condição para não renderizar o MiniDrawer na página de login
-  const isLoginPage = location.pathname === '/';
-
-  return (
-    <>
-      <Box
+            <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           marginTop: '64px', // Para evitar sobreposição com o AppBar
-          marginLeft: open && !isLoginPage ? '240px' : '50px', // Quando o menu está aberto, desloca o conteúdo
+          marginLeft: open ? '240px' : '50px', // Quando o menu está aberto, desloca o conteúdo
           transition: 'margin-left 0.3s ease', // Transição suave para abrir/fechar
         }}
       >
@@ -43,20 +29,21 @@ function AuthenticatedContent({ open, setOpen }) {
           <Route path="/" element={<LoginPage />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
-            <GraphPage />
+            <GraphPage open={open} setOpen={setOpen} />
             </ProtectedRoute>} /> 
           <Route path="/log" element={
             <ProtectedRoute>
-            <Logs />
+            <Logs open={open} setOpen={setOpen} />
             </ProtectedRoute>} />
          <Route path="/usuarios" element={
           <ProtectedRoute>
-            <Usuarios />
+            <Usuarios open={open} setOpen={setOpen}/>
             </ProtectedRoute>} />
         </Routes>
       </Box>
-    </>
+    </Router>
   );
 }
+
 
 export default App;

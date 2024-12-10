@@ -34,7 +34,7 @@ const LoginPage = () => {
       }
     } catch (err) {
       console.error('Erro na requisição:', err.response || err.message);
-      setError('Erro ao conectar ao servidor. Tente novamente mais tarde.');
+      setError('Usuário ou senha inválidos. Tente novamente.');
     } finally {
       setLoading(false);
     }

@@ -5,13 +5,16 @@ const SECRET_KEY = '_h4?Gk2B*9&@ZxY3!'
 
 export async function realizaLogin(req, res){
     const { username, password } = req.body;
-    const users = await getUsers();   
-
-    const user = users.find(user => user.username === username);
+    
     try {
+        const users = await getUsers();   
+        const user = users.find(user => user.username === username);
+
         if (username === user.username && password === user.password) {
             const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
             return res.json({ token });
+        }else{
+            res.status(404).json({ error: 'Credenciais inválidas' });
         }        
     } catch (error) {
         res.status(401).json({ error: 'Credenciais inválidas' });

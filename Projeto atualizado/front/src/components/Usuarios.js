@@ -40,7 +40,7 @@ const modalStyle = {
 
 const paginationModel = { page: 0, pageSize: 20 };
 
-export default function Usuarios() {
+export default function Usuarios({ open, setOpen }) {
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({
@@ -48,7 +48,6 @@ export default function Usuarios() {
     username: "",
     password: "",
   });
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [addingUser, setAddingUser] = useState(false);
 
