@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CircularProgress, Paper, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MiniDrawer from './Menu';
 
 const paginationModel = { page: 0, pageSize: 100 };
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   // Função para buscar os logs
   const fetchLogs = async () => {
@@ -67,7 +69,11 @@ export default function Logs() {
   ];
 
   return (
+
+    
+
     <Paper sx={{ height: '100%', width: '100%', marginTop: '10px' }}>
+      <MiniDrawer open={open} setOpen={setOpen} />
       {loading ? (
         <CircularProgress />
       ) : (
@@ -75,7 +81,7 @@ export default function Logs() {
           rows={logs}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[100, 200]}
+          pageSizeOptions={[100, 150]}
           checkboxSelection
           sx={{ border: 0 }}
         />

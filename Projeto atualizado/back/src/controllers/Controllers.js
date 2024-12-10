@@ -1,54 +1,41 @@
 import { getDados, registradado, insertUsuario, getUsers, excluirUsuario, consultaUltimoDado, excluirDado } from "../models/Models.js";
-import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
+const SECRET_KEY = '_h4?Gk2B*9&@ZxY3!'
 
+export async function realizaLogin(req, res){
+    const { username, password } = req.body;
+    const users = await getUsers();   
 
-export function isAuthenticated(req,res,next){
-    if(req.session.user){
-        return next();
-    }else{
-        res.redirect('/')
-    }
-}
-
-export function verificaAutenticacao(req, res){
-    if(req.session.user){
-        res.json({loggedIn: true})
-    } else {
-        res.json({loggedIn: false})
-    }
-}
-
-export async function realizaLogin (req,res){
-    const { username, password } = req.body
-    console.log('username', username)
-    console.log('senha', password)
-
+    const user = users.find(user => user.username === username);
     try {
-        const response = await axios.get('http://localhost:3005/consultar/usuarios');
-  
-        const formattedUsers = (response.data.users || []).map((user) => ({
-          id: user._id,
-          Nome: user.Nome,
-          username: user.username,
-          password: user.password
-        }));
-
-        const user = response.data.users.find((user) => user.username === username && user.password === password);
-
-
-        if(username === user.username && password === user.password){
-            console.log("Login Realizado com sucesso!")
-            req.session.user = {username}
-            res.status(200).json({ success: true })
-        }else{
-            res.json({success:false, message: 'Credenciais inválidas'})
-        }
-      } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
-      }
+        if (username === user.username && password === user.password) {
+            const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
+            return res.json({ token });
+        }        
+    } catch (error) {
+        res.status(401).json({ error: 'Credenciais inválidas' });
+        
+    }    
 }
-    
+
+export function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.sendStatus(401); // Token ausente
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); // Token inválido
+        }
+        req.user = user;
+        next();
+    });
+}
+
 
 export async function principal (req, res)
     {
@@ -84,7 +71,7 @@ export async function cadastrarNovoUsuario(req, res) {
 
 export async function consultaUsuarios(req, res) {
     const users = await getUsers();
-        res.status(200).json({users})
+    res.status(200).json({users});
     
 }
 
@@ -145,4 +132,7 @@ export async function deleteData(req, res) {
         res.status(500).json({ error: 'Erro ao excluir o Log.', details: err.message });
     }
 }
+
+
+
 

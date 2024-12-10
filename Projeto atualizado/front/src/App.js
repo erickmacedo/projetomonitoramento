@@ -6,6 +6,7 @@ import LoginPage from './components/Login'; // Página de Login
 import GraphPage from './components/GraphPage';
 import Usuarios from './components/Usuarios';
 import Logs from './components/Logs'
+import ProtectedRoute from './components/ProtectedRoute';
 import { Box } from '@mui/material';
 //MARTA INCLUIU A LINHA ABAIXO:
 //import Logs from './components/Logs';
@@ -28,9 +29,6 @@ function AuthenticatedContent({ open, setOpen }) {
 
   return (
     <>
-      {/* Renderiza o MiniDrawer somente se não for a página de login */}
-      {!isLoginPage && <MiniDrawer open={open} setOpen={setOpen} />}
-
       <Box
         component="main"
         sx={{
@@ -43,9 +41,18 @@ function AuthenticatedContent({ open, setOpen }) {
       >
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<GraphPage />} /> 
-          <Route path="/log" element={<Logs />} />
-         <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+            <GraphPage />
+            </ProtectedRoute>} /> 
+          <Route path="/log" element={
+            <ProtectedRoute>
+            <Logs />
+            </ProtectedRoute>} />
+         <Route path="/usuarios" element={
+          <ProtectedRoute>
+            <Usuarios />
+            </ProtectedRoute>} />
         </Routes>
       </Box>
     </>

@@ -20,9 +20,14 @@ const LoginPage = () => {
     try {
       const response = await axios.post('http://localhost:3005/login', { username, password });
 
-      if (response?.data?.success) {
+      // Verificar se o token foi retornado
+      if (response?.data?.token) {
         console.log('Login realizado com sucesso:', response.data);
-        sessionStorage.setItem('user', username);
+
+        // Armazenar o token no sessionStorage (ou localStorage, conforme sua necessidade)
+        sessionStorage.setItem('token', response.data.token);
+
+        // Redirecionar para o dashboard
         navigate('/dashboard');
       } else {
         setError('Usuário ou senha inválidos. Tente novamente.');

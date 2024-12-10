@@ -14,6 +14,7 @@ import {
 } from "@mui/material/";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/system";
+import MiniDrawer from "./Menu";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: "8px",
@@ -47,6 +48,7 @@ export default function Usuarios() {
     username: "",
     password: "",
   });
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [addingUser, setAddingUser] = useState(false);
 
@@ -128,7 +130,9 @@ export default function Usuarios() {
   ];
 
   return (
+
     <Box sx={{ padding: 2 }}>
+       <MiniDrawer open={open} setOpen={setOpen} />
       {/* Botão de Adicionar Usuário */}
       <StyledButton
         variant="contained"
