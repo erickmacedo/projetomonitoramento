@@ -20,7 +20,7 @@ export default function Logs({ open, setOpen }) {
         id: log._id,
         sensor: log.sensor,
         valor: log.valor,
-        dataHora: log.dataHora,
+        dataHora: log.datahora,
       }));
       setLogs(formattedLogs);
       setLoading(false);
@@ -80,7 +80,6 @@ export default function Logs({ open, setOpen }) {
           rows={logs}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[100, 150]}
           checkboxSelection
           sx={{ border: 0 }}
         />

@@ -63,8 +63,16 @@ export async function inserirNovoDado (req, res)
 export async function cadastrarNovoUsuario(req, res) {
     const usuario = req.body;
     try {
-        const usuariocadastrado = await insertUsuario(usuario)
-        res.status(200).json(usuariocadastrado);
+        const users = await getUsers();   
+        const user = users.find(user => user.username === usuario.username);
+
+        if(!user){
+            const usuariocadastrado = await insertUsuario(usuario)
+            res.status(200).json(usuariocadastrado);
+        }else{
+            res.status(500).json("Usuario Cadastrado");
+        }
+
     } catch (error) {
         console.error(error.message);
         res.status(500).json({"Erro":"Falha na requisição"})

@@ -57,7 +57,7 @@ const GraphPage = ({ open, setOpen }) => {
 
       // Gera uma lista única de sensores
       const uniqueSensors = [...new Set(formattedData.map((item) => item.sensor))];
-      setSensors(uniqueSensors);
+      setSensors(uniqueSensors.filter((sensor) => sensor !== "Presença"));
 
       setLoading(false);
     } catch (error) {
@@ -77,8 +77,8 @@ const GraphPage = ({ open, setOpen }) => {
 
   // Filtra os dados de acordo com o sensor selecionado
   const filteredData = selectedSensor
-    ? data.filter((item) => item.sensor === selectedSensor)
-    : data;
+  ? data.filter((item) => item.sensor === selectedSensor && item.sensor !== "Presença")
+  : data
 
   // Configuração do gráfico
   const chartData = {

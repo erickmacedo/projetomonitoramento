@@ -15,6 +15,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/system";
 import MiniDrawer from "./Menu";
+import { Message } from "@mui/icons-material";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: "8px",
@@ -64,6 +65,7 @@ export default function Usuarios({ open, setOpen }) {
       setLoading(false);
     } catch (error) {
       console.error("Erro ao buscar os dados:", error);
+      alert("Usuario ja cadastrado")
       setLoading(false);
     }
   };
@@ -89,6 +91,7 @@ export default function Usuarios({ open, setOpen }) {
       handleCloseModal();
     } catch (error) {
       console.error("Erro ao inserir dados:", error);
+      alert("Usuario Cadastrado")
     } finally {
       setAddingUser(false);
     }

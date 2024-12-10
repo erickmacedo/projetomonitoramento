@@ -3,11 +3,10 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
-import { useState, useEffect   } from "react";
+import { useState, useEffect} from "react";
 
 const gradientColors = [
   "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)", // Roxo-azul
@@ -28,6 +27,7 @@ export default function DynamicCards() {
         id: dado._id,
         label: dado.sensor,
         value: dado.ultimoDado.valor,
+        datahora: dado.ultimoDado.datahora
       }));
       console.log("Dados:", formattedData);
       setSensorData(formattedData);
@@ -97,6 +97,17 @@ export default function DynamicCards() {
                 >
                   {sensor.value}
                 </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "1.2rem",
+                    fontWeight: "medium",
+                    textAlign: "center",
+                    marginTop: 2,
+                  }}
+                >
+                  Ultima Atualização: {sensor.datahora}
+                </Typography>
               </CardContent>
               <CardActions
                 sx={{
@@ -104,18 +115,7 @@ export default function DynamicCards() {
                   justifyContent: "center",
                 }}
               >
-                <Button
-                  size="small"
-                  sx={{
-                    color: "white",
-                    border: "1px solid white",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    },
-                  }}
-                >
-                  Ver Log
-                </Button>
+
               </CardActions>
             </Card>
           </Grid>
